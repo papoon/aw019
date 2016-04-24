@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Goutte\Client;
-
+use DB;
 
 class Wiki extends Command
 {
@@ -39,33 +39,12 @@ class Wiki extends Command
      */
     public function handle()
     {
+
         $url = "http://pt.wikipedia.org/wiki/Campeonato_Europeu_de_Futebol_de_2016";
-        //$news = LastNews::all();
+        
         $client = new Client();
         $crawler = $client->request('GET', $url);
         
-
-        /*$crawler->filter('div[id="mw-content-text"] > p,h2>span[class="mw-headline"]')->each(function ($node) {
-
-            echo '<'.$node->nodeName().'>'.PHP_EOL;
-            echo $node->text().PHP_EOL;
-            echo '</'.$node->nodeName().'>'.PHP_EOL;
-            /*$node->filter('div[id="mw-content-text"] > p,h2')->each(function ($node) {
-
-            });
-        });*/
-
-        
-        
-
-        /*$outFunction = $crawler->filter('div[id="mw-content-text"] > table')->each(function ($node) {
-            if($node->nodeName() == "table"){
-                //print_r( $node->html());
-               
-                return $node->html();
-            }
-        });
-        var_dump($outFunction);*/
 
         $conteudoPagina = $crawler->filter('body > div[id="content"] > div[id="bodyContent"] > div[id="mw-content-text"]');
 
@@ -105,8 +84,10 @@ class Wiki extends Command
             }
         }
 
-        //var_dump($listaArbitos[0]);
-        
+        //var_dump($listaArbitos);
+
+        /////////////////////////////////////////////////////////////////////////////
+        // Estadios
         $tabelaEstadios = $conteudoPagina->filter('table')->eq(7);
         //var_dump($tabelaEstadios);
         //
@@ -124,11 +105,11 @@ class Wiki extends Command
         $colunaCompleta = 0;
         $numeroCol = 4;
         $numeroLine = 0;
-        for ($i=1; $i < count($estadios)+1; $i++) {
+        for ($i=1; $i < 24; $i++) {
             //hack
             
             $estadioInfo[] = ($numeroLine == 4 ? $estadios[$i-1]->html() : $estadios[$i-1]->text());
-            if($i%($i != 21 ? $numeroCol : 3) ==0){
+            if($i%$numeroCol==0){
                 
                 $listaEstadios[] = $estadioInfo;
                 unset($estadioInfo);
@@ -136,19 +117,22 @@ class Wiki extends Command
                 $numeroLine++;
             }
             if($colunaCompleta == 5){
-                $i = $i + ($numeroCol == 4 ? 3 : 2);
+                //$i = $i + ($numeroCol == 4 ? 3 : 2);
                 $colunaCompleta = 0;
-                $numeroCol = ($numeroCol == 4 ? 2 : 4);
+                //$numeroCol = ($numeroCol == 4 ? 2 : 4);
                 $numeroLine = 0;
             }
             
         }
+        
+
+
         $listaEstadios2 = array();
         $estadioInfo = array();
         $colunaCompleta = 0;
         $numeroCol = 2;
         $numeroLine = 0;
-        for ($i=23; $i < count($estadios)-20; $i++) {
+        for ($i=23; $i < count($estadios)-22; $i++) {
             //hack
             
             $estadioInfo[] = ($numeroLine == 4 ? $estadios[$i]->html() : $estadios[$i]->text());
@@ -167,6 +151,8 @@ class Wiki extends Command
             }
             
         }
+
+        //var_dump($listaEstadios2);
 
         $listaEstadios3 = array();
         $estadioInfo = array();
@@ -194,8 +180,71 @@ class Wiki extends Command
         }
 
 
+        $listaEstadiosGeral = array();
+        $listaEstadiosOrg = array();
+        //var_dump($listaEstadios3);
+        
+        for ($i=0; $i < count($listaEstadios); $i++) {
+            foreach ($listaEstadios[$i] as $key => $value) {
+                $listaEstadiosGeral[$i][] = $value;
+            }
+        }
+        
+        for ($i=0; $i < count($listaEstadios2); $i++) {
+            foreach ($listaEstadios2[$i] as $key => $value) {
+                $listaEstadiosGeral[$i][] = $value;
+            }
+        }
+        
+        for ($i=0; $i < count($listaEstadios3); $i++) {
+            foreach ($listaEstadios3[$i] as $key => $value) {
+                $listaEstadiosGeral[$i][] = $value;
 
-        var_dump($listaEstadios3);
+            }
+        }
+
+        for ($i=0; $i < count($listaEstadiosGeral); $i++) {
+            $j=0;
+            foreach ($listaEstadiosGeral[$i] as $key => $value) {
+                $listaEstadiosOrg[$j][] = $value;
+                $j++;
+            }
+        }
+
+
+        //var_dump($listaEstadiosOrg);
+        
+        $queryEstadios = "INSERT INTO `aw019`.`estadios`
+                        (
+                        `estadio`,
+                        `cidade`,
+                        `capacidade`,
+                        `cordenadas`,
+                        `imagem_link`
+                        )
+                        ";
+
+        $values = "VALUES";
+        foreach ($listaEstadiosOrg as $key => $value) {
+            $values.="
+                        (
+                        '".$value[1]."',
+                        '".$value[0]."',
+                        '".$value[3]."',
+                        '".$value[2]."',
+                        '".$value[4]."'
+                        ),";
+        }
+        $values = rtrim($values,',');
+
+        //DB::insert($queryEstadios.$values);
+        echo $queryEstadios.$values;
+        //echo $link;
+
+
+        //Fim estádios
+
+        ///////////////////////////////////////////////////////////////////////////////
         //
         /*
         $tabelaGrupoA = $conteudoPagina->filter('table')->eq(11);

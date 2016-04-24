@@ -1,18 +1,16 @@
-@extends('master')
+@extends('admin.master')
 
     @section('head')
 
     @parent
-        <link rel="stylesheet" href="{{ URL::asset('assets/style.css') }}"  type="text/css" >
+     
     @stop
     
     
     @section('content')
-        <div class="container">
+        
             <div class="content">
                 <div class="title">AW019 - Admin Area</div>
-                
-                
             </div>
             <div class="row">
                 <div class="col-md-4 col-md-offset-4">
@@ -52,7 +50,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        
 
         <script type="text/javascript">
 
