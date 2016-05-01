@@ -16,10 +16,14 @@ Route::group(['middleware' => ['web']], function () {
     
     Route::get('/',  ['uses' => 'WelcomeController@index', 'as' => 'index']);
     Route::get('noticias/',['uses' => 'NoticiasController@index', 'as' => 'noticias.index']);
+
     Route::get('estadios/',['uses' => 'EstadiosController@index', 'as' => 'estadios.index']);
+    Route::get('estadios/{id}',['uses' => 'EstadiosController@show', 'as' => 'estadios.show']);
+
     Route::get('jogos/',['uses' => 'JogosController@index', 'as' => 'jogos.index']);
     Route::get('cidades/',['uses' => 'CidadesController@index', 'as' => 'cidades.index']);
     Route::get('equipas/',['uses' => 'EquipasController@index', 'as' => 'equipas.index']);
+    Route::get('equipas/{id}',['uses' => 'EquipasController@index', 'as' => 'equipas.show']);
     Route::get('estatisticas/',['uses' => 'EstatisticasController@index', 'as' => 'estatisticas.index']);
     Route::get('historia/',['uses' => 'historiaController@index', 'as' => 'historia.index']);
 

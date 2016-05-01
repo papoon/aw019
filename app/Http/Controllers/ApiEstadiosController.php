@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use App\Estadios;
 
 class ApiEstadiosController extends Controller
 {
@@ -16,6 +17,12 @@ class ApiEstadiosController extends Controller
     public function index()
     {
         //
+        $estadios = Estadios::all();
+
+        return response()->json(array(
+            'error' => false,
+            'estadios' => $estadios
+        ),200);
     }
 
     /**

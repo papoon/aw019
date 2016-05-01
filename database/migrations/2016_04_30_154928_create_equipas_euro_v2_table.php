@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class MudarColunaImageLin extends Migration
+class CreateEquipasEuroV2Table extends Migration
 {
     /**
      * Run the migrations.
@@ -12,8 +12,10 @@ class MudarColunaImageLin extends Migration
      */
     public function up()
     {
-        Schema::table('estadios', function (Blueprint $table) {
-            //
+        Schema::create('equipas_euro', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('equipa',100);
+            $table->timestamps();
         });
     }
 
@@ -24,8 +26,6 @@ class MudarColunaImageLin extends Migration
      */
     public function down()
     {
-        Schema::table('estadios', function (Blueprint $table) {
-            //
-        });
+        Schema::drop('equipas_euro');
     }
 }

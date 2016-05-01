@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use App\equipas;
 
 class ApiEquipasController extends Controller
 {
@@ -17,11 +18,11 @@ class ApiEquipasController extends Controller
     {
         //*ainda não está criada a tabela e o Model Equipas
         //retorna um array com o conteudo da tabela 
-        //$equipas = Equipas::all();
+        $equipas = Equipas::all();
 
         return response()->json(array(
             'error' => false,
-            'equipas' => ['ola']
+            'equipas' => $equipas
         ),200);
 
     }
@@ -56,6 +57,12 @@ class ApiEquipasController extends Controller
     public function show($id)
     {
         //
+        $equipa = Equipas::find($id);
+
+        return response()->json(array(
+            'error' => false,
+            'equipa' => $equipa
+        ),200);
     }
 
     /**

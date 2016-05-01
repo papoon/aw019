@@ -88,14 +88,10 @@
                                         <li class="dropdown">
                                             <a href="{{ route('estadios.index') }}" class="dropdown-toggle" data-toggle="dropdown">Estadios<b class="caret"></b></a>
                                             <ul class="dropdown-menu">
-                                                <li><a href="estadios.html">EStadio1</a></li>
-                                                <li class="divider"></li>
-                                                <li><a href="estadios.html">Estadio2</a></li>
-                                                <li class="divider"></li>
-                                                <li><a href="estadios.html">Estadio3</a></li>
-                                                <li class="divider"></li>
-                                                <li><a href="estadios.html">Estadio4</a></li>
-                                                <li class="divider"></li>
+                                                @foreach($estadios as $item)
+                                                    <li><a href="{{URL::to('estadios/'.$item->id)}}">{{ $item->estadio }}</a></li>
+                                                    <li class="divider"></li>
+                                                @endforeach
                                             </ul>
                                         </li>
                                         <li><a href="{{ route('jogos.index') }}">Jogos</a></li>
@@ -106,28 +102,18 @@
                                                 <div class="row">
                                                     <div class="col-sm-6">
                                                         <ul class="multi-column-dropdown">
-                                                            <li><a href="business.html">Action</a></li>
+                                                        @for($i=0; $i < count($equipas); $i=$i+2)
+                                                            <li><a href="{{URL::to('equipas/'.$equipas[$i]->id)}}">{{ $equipas[$i]->equipa}}</a></li>
                                                             <li class="divider"></li>
-                                                            <li><a href="business.html">bulls</a></li>
-                                                            <li class="divider"></li>
-                                                            <li><a href="business.html">markets</a></li>
-                                                            <li class="divider"></li>
-                                                            <li><a href="business.html">Reviews</a></li>
-                                                            <li class="divider"></li>
-                                                            <li><a href="shortcodes.html">Short codes</a></li>
+                                                        @endfor
                                                         </ul>
                                                     </div>
                                                     <div class="col-sm-6">
                                                         <ul class="multi-column-dropdown">
-                                                           <li><a href="business.html">features</a></li>    
+                                                           @for($i=1; $i < count($equipas); $i=$i+2)
+                                                            <li><a href="{{URL::to('equipas/'.$equipas[$i]->id)}}">{{$equipas[$i]->equipa}}</a></li>
                                                             <li class="divider"></li>
-                                                            <li><a href="entertainment.html">Movies</a></li>
-                                                            <li class="divider"></li>
-                                                            <li><a href="sports.html">sports</a></li>
-                                                            <li class="divider"></li>
-                                                            <li><a href="business.html">Reviews</a></li>
-                                                            <li class="divider"></li>
-                                                            <li><a href="business.html">Stock</a></li>
+                                                            @endfor
                                                         </ul>
                                                     </div>
                                                 </div>

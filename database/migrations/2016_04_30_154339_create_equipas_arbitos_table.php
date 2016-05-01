@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateEstadiosTable extends Migration
+class CreateEquipasArbitosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,13 +12,10 @@ class CreateEstadiosTable extends Migration
      */
     public function up()
     {
-        Schema::create('estadios', function (Blueprint $table) {
+        Schema::create('arbitos', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('estadio',100);
-            $table->string('cidade',100);
-            $table->string('capacidade',100);
-            $table->string('cordenadas',100);
-            $table->text('imagem_html_link');
+            $table->string('nome',100);
+            $table->string('pais',100);
             $table->timestamps();
         });
     }
@@ -30,6 +27,6 @@ class CreateEstadiosTable extends Migration
      */
     public function down()
     {
-        Schema::drop('estadios');
+        Schema::drop('arbitos');
     }
 }

@@ -53,18 +53,39 @@ class Wiki extends Command
         $tabelaPaisesQualificados = $conteudoPagina->filter('table')->eq(4);
         //var_dump($tabela);
 
-        $paises = $tabelaPaisesQualificados->filter('tr > td:first-child > a:last-child')->each(function($node,$i){
+        $paises = $tabelaPaisesQualificados->filter('tr > td:first-child > a')->each(function($node,$i){
             
             return $node;
         });
-
+        /*
         //lista com os paises a participar no euro
         $listaPaisesEuro = array();
         foreach ($paises as $key => $value) {
-            $listaPaisesEuro[] = $value->text();
+            if($value->text() != "")
+                $listaPaisesEuro[] = $value->text();
         }
-        //var_dump($listaPaisesEuro);
+        
+        
+        $queryPaisesEuro = "INSERT INTO `aw019`.`equipas_euro`
+                        (
+                        `equipa`
+                        )
+                        ";
+
+        $values = "VALUES";
+        foreach ($listaPaisesEuro as $key => $value) {
+            $values.="
+                        (
+                        '".$value."'
+                        ),";
+        }
+        $values = rtrim($values,',');
+
+        DB::insert($queryPaisesEuro.$values);
+        //echo $queryPaisesEuro.$values;
         //
+        ########################################################
+        #arbirtos#
         
         $tabelaArbitos = $conteudoPagina->filter('table')->eq(6);
         //var_dump($tabelaArbitos->html());
@@ -85,7 +106,28 @@ class Wiki extends Command
         }
 
         //var_dump($listaArbitos);
+        $queryArbitos = "INSERT INTO `aw019`.`arbitos`
+                        (
+                        `nome`,
+                        `pais`
+                        )
+                        ";
 
+        $values = "VALUES";
+        foreach ($listaArbitos as $key => $value) {
+            $values.="
+                        (
+                        '".$value[1]."',
+                        '".$value[0]."'
+                        ),";
+        }
+        $values = rtrim($values,',');
+
+        DB::insert($queryArbitos.$values);
+        //echo $queryArbitos.$values;
+        
+
+        
         /////////////////////////////////////////////////////////////////////////////
         // Estadios
         $tabelaEstadios = $conteudoPagina->filter('table')->eq(7);
@@ -220,7 +262,7 @@ class Wiki extends Command
                         `cidade`,
                         `capacidade`,
                         `cordenadas`,
-                        `imagem_link`
+                        `imagem_html_link`
                         )
                         ";
 
@@ -229,7 +271,7 @@ class Wiki extends Command
             $values.="
                         (
                         '".$value[1]."',
-                        '".$value[0]."',
+                        '".substr($value[0],0,(strpos($value[0], " ") != false ? strpos($value[0], " ") : strlen($value[0]) ))."',
                         '".$value[3]."',
                         '".$value[2]."',
                         '".$value[4]."'
@@ -237,19 +279,20 @@ class Wiki extends Command
         }
         $values = rtrim($values,',');
 
-        //DB::insert($queryEstadios.$values);
-        echo $queryEstadios.$values;
+        DB::insert($queryEstadios.$values);
+        //echo $queryEstadios.$values;
         //echo $link;
 
-
+        
         //Fim estádios
-
+        */
         ///////////////////////////////////////////////////////////////////////////////
         //
-        /*
-        $tabelaGrupoA = $conteudoPagina->filter('table')->eq(11);
+    
+        $tabelaGrupoA = $conteudoPagina->filter('table')->eq(8);
         //var_dump($tabelaGrupoA->html());
-
+        var_dump('<table>'.preg_replace('/(<[^>]+) style=".*?"/i', '$1', $tabelaGrupoA->html()).'</table>');
+        /*
         $tabelaGrupoAPrimeiraJornadaJogo1 = $conteudoPagina->filter('table')->eq(12);
         var_dump('<table>'.preg_replace('/(<[^>]+) style=".*?"/i', '$1', $tabelaGrupoAPrimeiraJornadaJogo1->html()).'</table>');
         $tabelaGrupoAPrimeiraJornadaJogo2 = $conteudoPagina->filter('table')->eq(13);
@@ -379,7 +422,7 @@ class Wiki extends Command
         $tabelaGrupoFTerceiraJornadaJogo2 = $conteudoPagina->filter('table')->eq(52);
         var_dump('<table>'.preg_replace('/(<[^>]+) style=".*?"/i', '$1', $tabelaGrupoFTerceiraJornadaJogo2->html()).'</table>');
 
-        */
+        
         //$esquemaEliminatorias = $conteudoPagina->filter('table')->eq(55);
         //$esquemaEliminatoriasHtml = '<table>'.preg_replace('/(<[^>]+) style=".*?"/i', '$1', $esquemaEliminatorias->html()).'</table>';
         

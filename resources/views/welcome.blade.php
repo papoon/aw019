@@ -19,6 +19,7 @@
                             <li>
                                 <img src="{{ $item->img_link }}" alt="">
                                 <div class="caption">
+                                {{ URL::route('equipas.index') }}
                                     <h4>{{ $item->title }}</h4>
                                     <a href="{{ $item->link }}" target="_blank">{{ $item->description }}</a>
                                 </div>
